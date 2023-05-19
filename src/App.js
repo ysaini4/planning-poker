@@ -4,7 +4,7 @@ import React, {createContext} from 'react';
 import PlanningPoker from './PlanningPoker';
 import io from 'socket.io-client';
 import {SocketContext} from './Socketcontext'
-const socket = io('http://localhost:3001', {  autoConnect: true, transports: ['websocket'] }); // connect to the socket.io server
+const socket = io('https://fast-depths-40126.herokuapp.com', {  autoConnect: true, transports: ['websocket'] }); // connect to the socket.io server
 function App() {
   
   return (
