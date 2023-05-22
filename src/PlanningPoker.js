@@ -10,7 +10,7 @@ function PlanningPoker() {
   const [reveal, setReveal] = useState(false)
   const socket = useContext(SocketContext);
   const [roomData, setRoomData] = useState([]);
-  const urlRoom = new URLSearchParams(window.location.search).get('yogy')
+  const urlRoom = new URLSearchParams(window.location.search).get('Id')
   const handleNameUpdate = (room, name) => {
     setRoom(room)
     setName(name)
@@ -60,7 +60,7 @@ function PlanningPoker() {
     <div>
       <h1 style={{color:'#70a379'}}>PLANNING POKER</h1>
       { (!name && !room) && <NameForm onNameUpdate={handleNameUpdate} urlRoom = {urlRoom}/> }
-      {!urlRoom && room && <p>URL - {`${window.location.href}?yogy=${room}`}</p>}
+      {!urlRoom && room && <p>URL - {`${window.location.href}?Id=${room}`}</p>}
       {(name && room) && <h2>Name: {name}</h2>}
       { (name && room) && <PlanningPokerGame name={name}  room={room} urlRoom = {urlRoom} reveal={reveal}/> }
       

@@ -5,7 +5,6 @@ import {SocketContext} from './Socketcontext'
 
 function PlanningPokerGame({name, room, urlRoom, reveal}) {
   const [vote, setVote] = useState(null)
-  //const socket = io('http://localhost:3001', { transports: ['websocket'] }); // connect to the socket.io server
   const socket = useContext(SocketContext);
 
   function handleVoteChange(e) {

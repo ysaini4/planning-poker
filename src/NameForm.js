@@ -3,7 +3,6 @@ import {SocketContext} from './Socketcontext'
 import ShortUniqueId from 'short-unique-id';
 function NameForm({onNameUpdate, urlRoom}) {
   const [name, setName] = useState('');
-  //const socket = io('http://localhost:3001', { transports: ['websocket'] }); // connect to the socket.io server
   const socket = useContext(SocketContext);
   const uniqueId = new ShortUniqueId({ length: 10 });
   const handleChange = (event) => {
