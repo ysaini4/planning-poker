@@ -43,7 +43,7 @@ function PlanningPokerGame({name, room, urlRoom, reveal}) {
       </select>
       {reveal && <button onClick={handleVote}>Vote</button>}
       {!urlRoom && <button onClick={handleReveal}>Reveal</button>}
-      {!urlRoom && <button onClick={handleClear}>Clear</button>}
+      {!urlRoom && <button onClick={handleClear}>Restart</button>}
     </div>
   );
 }
