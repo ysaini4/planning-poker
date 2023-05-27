@@ -1,6 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import {SocketContext} from './Socketcontext'
 import ShortUniqueId from 'short-unique-id';
+import './App.css';
+
 function NameForm({onNameUpdate, urlRoom}) {
   const [name, setName] = useState('');
   const socket = useContext(SocketContext);
@@ -30,10 +32,10 @@ function NameForm({onNameUpdate, urlRoom}) {
   return (
     <form onSubmit={handleSubmit}>
       <label>
-        Name:
-        <input type="text" value={name} onChange={handleChange} />
+        
+        <input className='textInput' type="text" value={name} onChange={handleChange} placeholder='Enter Your Name'/>
       </label>
-      <button type="submit">Submit</button>
+      <button className='button nameButton' type="submit">Submit</button>
     </form>
   );
 }

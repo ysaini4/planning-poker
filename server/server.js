@@ -8,22 +8,25 @@ const roomsData = {}
 const port = process.env.PORT || 3001;
 const io = require('socket.io')(server);
 
-
 io.on('connection', (socket) => {
-  console.log('a user connected');
-
+  console.log('a user connected', socket.id);
+  socket.on("disconnect", (reason) => {
+    console.log('disconnet--', socket.id,'ssss')
+    Object.keys(roomsData).forEach(room => {
+      console.log(room, roomsData[room],'vv')
+      roomsData[room] = roomsData[room].filter(user => user.id !== socket.id);
+      io.to(room).emit('broadVote', {roomData: roomsData[room]})
+    })
+  });
   socket.on('broadMember', (room) => {
-    const roomString = room.toString()
-    console.log(roomsData[roomString],'ddddd---')
-    socket.emit('broadVote', { roomData: roomsData[roomString] });
-    socket.broadcast.emit('broadVote', {roomData: roomsData[roomString]});
+    io.to(room).emit('broadVote', {roomData: roomsData[room]})
   })
   socket.on('reveal', (room) => {
     roomsData[room].map(item => {
-      item.reveal = true;
+      if(item.isAdmin) 
+        item.reveal = true;
     })
-    socket.emit('broadVote', { roomData: roomsData[room] });
-    socket.broadcast.emit('broadVote', {roomData: roomsData[room]});
+    io.to(room).emit('broadVote', {roomData: roomsData[room]})
 
   })
   socket.on('clear', (room) => {
@@ -32,21 +35,20 @@ io.on('connection', (socket) => {
       item.voteDone = false;
       item.reveal = false;
     })
-    socket.emit('broadVote', { roomData: roomsData[room] });
-    socket.broadcast.emit('broadVote', {roomData: roomsData[room]});
+    io.to(room).emit('restarted')
+
+    io.to(room).emit('broadVote', {roomData: roomsData[room]})
 
   })
   socket.on('vote', ({ name, room, vote }) => {
     const roomString = room.toString()
+    console.log(vote,'voteeee')
     const voterData = roomsData[roomString] && roomsData[roomString].find(item => item.name === name)
     if (voterData) {
 
       voterData.vote = vote
       voterData.voteDone = true;
-      console.log("HERRE vote")
-
-      socket.broadcast.emit('broadVote', {roomData: roomsData[roomString]});
-      socket.emit('broadVote', { roomData: roomsData[roomString] });
+      io.to(room).emit('broadVote', {roomData: roomsData[room]})
     } else {
       console.log('No Data ')
     }
@@ -54,41 +56,21 @@ io.on('connection', (socket) => {
   });
 
   socket.on('createRoom', (name, room) => {
-    console.log(`${name} joined the room ${room}`);
-    // const user = userJoin(socket.id, name, room); 
-    // create a new room with the user's name as the room ID
-    // let i = 0;
-    // let room = i.toString();
-    // let roomSeleted = false;
-    // while (!roomSeleted) {
-    //   i++;
-    //   room = i.toString();
-    //   if (createdRooms.indexOf(room) === -1) {
-    //     roomSeleted = true
-    //     createdRooms.push(room);
-    //   }
-
-
-    // }
-    //socket.join(room);
+    console.log(`${name} joined the room ${room}--- ${socket.id}`);
+    socket.join(room);
     createdRooms.push(room);
     roomsData[room] = []
     roomsData[room].push({
       name,
-      vote: 0
+      vote: 0,
+      id: socket.id,
+      isAdmin: true
     })
-    // emit room name to the client
     socket.emit('roomCreated', { room });
-    console.log("HERRE create")
-
-    socket.broadcast.emit('broadVote', { roomData: roomsData[room] });
-    socket.emit('broadVote', { roomData: roomsData[room] });
-
-    // socket.broadcast.to(name).emit('join', `${name} has joined the room`);
+    io.to(room).emit('broadVote', {roomData: roomsData[room]})
 
   });
 
-  // Handle joining a room
   socket.on("joinRoom", (name, room) => {
     const roomString = room.toString()
     if (createdRooms.indexOf(roomString) === -1) {
@@ -96,21 +78,16 @@ io.on('connection', (socket) => {
     } else {
       roomsData[roomString].push({
         name,
-        vote: 0
+        vote: 0,
+        id: socket.id
       })
       socket.emit('roomJoined');
-      console.log("HERRE join")
-
-      socket.broadcast.emit('broadVote', { roomData: roomsData[roomString] });
-      socket.emit('broadVote', { roomData: roomsData[roomString] });
-
+      socket.join(room);
+    io.to(room).emit('broadVote', {roomData: roomsData[room]})
+      io.to(room).emit('broadVote', {roomData: roomsData[room]})
     }
 
   });
 });
-
-// app.get('/', (req, res) => {
-//   res.send('Server is up and running.');
-// });
 
 server.listen(port, () => console.log(`Listening on port ${port}`));

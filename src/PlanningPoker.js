@@ -3,18 +3,21 @@ import NameForm from './NameForm';
 import PlanningPokerGame from './PlanningPokerGame';
 import VoterCard from './VoterCard';
 import {SocketContext} from './Socketcontext'
-
+import './App.css';
 function PlanningPoker() {
   const [name, setName] = useState(null)
   const [room, setRoom] = useState(null)
   const [reveal, setReveal] = useState(false)
+  const [isBossAvailable, setBossAvailablity] = useState(false)
   const socket = useContext(SocketContext);
   const [roomData, setRoomData] = useState([]);
-  const urlRoom = new URLSearchParams(window.location.search).get('Id')
+  const urlRoom = new URLSearchParams(window.location.search).get('Id');
+  const url = `${window.location.href}?Id=${room}`
   const handleNameUpdate = (room, name) => {
     setRoom(room)
     setName(name)
   }
+
   useEffect(() => {
     console.log(urlRoom,'urlRoom---')
     if(urlRoom) {
@@ -29,43 +32,55 @@ function PlanningPoker() {
   }, [socket])
 
   useEffect(() => {
-    const reveal = !!roomData.filter(item => !item.reveal).length
+    const reveal = !!roomData.filter(item => item.reveal && item.isAdmin).length
+    const isBossAvailable = !!roomData.filter(item => item.isAdmin).length
+    setBossAvailablity(isBossAvailable)
     setReveal(reveal)
   }, [roomData])
-  
-//  useEffect(() => {
-//   if(room) {
-//     console.log(room,'room-----')
-//     const cipherText = AES.encrypt(room.toString(),'yogy').toString();
-//     setChiper(cipherText)
-//   }
-//  }, [room])
+  useEffect(() => {
+    const spans = document.querySelectorAll('.word span');
 
-//  useEffect(() => {
-//   if(urlRoomEN) {
-//     try{
-//       const cipherText = AES.encrypt('1','yogy').toString();
-//       const bytes = AES.decrypt(urlRoomEN, 'yogy');
-//       const decrypted = bytes.toString(enc.Utf8);
-//       console.log(decrypted,'decrypted--', urlRoomEN)
-//       setUrlRoom(decrypted)
-//     } catch(e) {
-//       console.log('IN DECRYPTED ERROR')
-//     }
-//   }
-//  }, [urlRoomEN])
-
-
-  return (
-    <div>
-      <h1 style={{color:'#70a379'}}>PLANNING POKER</h1>
-      { (!name && !room) && <NameForm onNameUpdate={handleNameUpdate} urlRoom = {urlRoom}/> }
-      {!urlRoom && room && <p>URL - {`${window.location.href}?Id=${room}`}</p>}
-      {(name && room) && <h2>Name: {name}</h2>}
-      { (name && room) && <PlanningPokerGame name={name}  room={room} urlRoom = {urlRoom} reveal={reveal}/> }
+    spans.forEach((span, idx) => {
+      span.addEventListener('click', (e) => {
+        e.target.classList.add('active');
+      });
+      span.addEventListener('animationend', (e) => {
+        e.target.classList.remove('active');
+      });
       
-      <VoterCard roomData = {roomData} />
-      {/* render the rest of the planning poker game here */}
+      // Initial animation
+      setTimeout(() => {
+        span.classList.add('active');
+      }, 750 * (idx+1))
+    });
+  }, [])
+  return (
+    <div className='App'>
+      {/* <h1 className='heading'>PLANNING POKER</h1> */}
+      <div class="word heading">
+        <span>P</span>
+        <span>L</span>
+        <span>A</span>
+        <span>N</span>
+        <span>N</span> 
+        <span>I</span> 
+        <span>N</span> 
+        <span>G</span> 
+        <span>-</span>
+        <span>P</span> 
+        <span>O</span> 
+        <span>K</span> 
+        <span>E</span> 
+        <span>R</span> 
+
+      </div>
+      {/* <h1><span class='one'>r</span><span class='two'>i</span><span class='three'>s</span><span class='four'>e</span> <span class='five'>u</span><span class='six'>p</span></h1> */}
+      { (!name && !room) && <NameForm onNameUpdate={handleNameUpdate} urlRoom = {urlRoom}/> }
+      {!urlRoom && room && <p className='urlClass'>URL - <span className='urlColor'>{url}</span></p>}
+      {(name && room) && <h2 className='intro'>Hi {name}</h2>}
+      { (name && room) && <PlanningPokerGame name={name}  room={room} urlRoom = {urlRoom} reveal={reveal} isBossAvailable = {isBossAvailable}/> }
+      
+      <VoterCard roomData = {roomData} reveal= {reveal}/>
     </div>
   );
 }

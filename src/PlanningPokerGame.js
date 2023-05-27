@@ -1,32 +1,27 @@
-// PlanningPokerGame.js
-
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {SocketContext} from './Socketcontext'
-
-function PlanningPokerGame({name, room, urlRoom, reveal}) {
+import './App.css'
+function PlanningPokerGame({name, room, urlRoom, reveal, isBossAvailable}) {
   const [vote, setVote] = useState(null)
   const socket = useContext(SocketContext);
 
-  function handleVoteChange(e) {
-   // setVotes((prevVotes) => [...prevVotes, vote]);
-    if(e.target.value) {
-      setVote(e.target.value)
-    }
-    // // Calculate the average of all votes
-    // const total = votes.reduce((acc, curr) => acc + curr, 0);
-    // const avg = total / votes.length;
-    // setAverage(avg);
-  }
-  const handleVote = () => {
-    socket.emit('vote', {name, room, vote});
-    socket.emit('S')
-  }
+  function handleVoteChange(e,val) {
+    const voteValue = e.target.value
+    console.log(voteValue,'ddd')
+    if(voteValue) {
+      setVote(voteValue);
+      socket.emit('vote', {name, room, vote:voteValue});
 
-  // socket.on('broadVote', ({roomData}) => {
-  //     console.log(roomData, 'ddd')
-  // });
+    }
+  }
+  useEffect(() => {
+    socket.on('restarted', () => {
+      setVote(null)
+  });
+  }, [socket])
+
   
-  const pokerNo = [1, 2, 3, 5, 8, 13, 20, 40, 100]
+  const pokerNo = [1, 3, 5, 8, 13, 20, 40, 100]
   
   const handleReveal = () => {
     socket.emit('reveal', room);
@@ -37,13 +32,25 @@ function PlanningPokerGame({name, room, urlRoom, reveal}) {
   }
   return (
     <div>
-      <select onChange={handleVoteChange} disabled={!reveal}>
-        <option value={0}>Select Your Poker Value</option>
-        {pokerNo.map(item => <option value={item} key={item}>{item}</option>)}
-      </select>
-      {reveal && <button onClick={handleVote}>Vote</button>}
-      {!urlRoom && <button onClick={handleReveal}>Reveal</button>}
-      {!urlRoom && <button onClick={handleClear}>Restart</button>}
+      {isBossAvailable ? <>
+      
+        <div className='wrapper'>
+        {pokerNo.map(item => <>
+        <input disabled={reveal} type="radio" name="select" id={item.toString()} onChange={handleVoteChange} value={item} checked={vote == item} />
+        <label htmlFor={item.toString()} className="option">
+           <span>
+            {item}
+            </span>
+              </label>
+             
+         </>
+         )}
+          </div>
+      {!urlRoom && <button className='button' onClick={handleReveal}>Reveal</button>}
+      {!urlRoom && <button className='button' onClick={handleClear}>Restart</button>}
+      </>
+      : <p style={{color:'red'}}> Your Boss left. What are you are waiting for? You can also leave.</p>
+    }
     </div>
   );
 }
