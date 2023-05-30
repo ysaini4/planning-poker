@@ -55,32 +55,37 @@ function PlanningPoker() {
     });
   }, [])
   return (
-    <div className='App'>
-      {/* <h1 className='heading'>PLANNING POKER</h1> */}
-      <div class="word heading">
-        <span>P</span>
-        <span>L</span>
-        <span>A</span>
-        <span>N</span>
-        <span>N</span> 
-        <span>I</span> 
-        <span>N</span> 
-        <span>G</span> 
-        <span>-</span>
-        <span>P</span> 
-        <span>O</span> 
-        <span>K</span> 
-        <span>E</span> 
-        <span>R</span> 
+    <div className='app'>
+      <div className='app1'>
+        {/* <h1 className='heading'>PLANNING POKER</h1> */}
+        <div class="word heading">
+          <span>P</span>
+          <span>L</span>
+          <span>A</span>
+          <span>N</span>
+          <span>N</span> 
+          <span>I</span> 
+          <span>N</span> 
+          <span>G</span> 
+          <span>-</span>
+          <span>P</span> 
+          <span>O</span> 
+          <span>K</span> 
+          <span>E</span> 
+          <span>R</span> 
 
+        </div>
+        {/* <h1><span class='one'>r</span><span class='two'>i</span><span class='three'>s</span><span class='four'>e</span> <span class='five'>u</span><span class='six'>p</span></h1> */}
+        { (!name && !room) && <NameForm onNameUpdate={handleNameUpdate} urlRoom = {urlRoom}/> }
+        {!urlRoom && room && <p className='urlClass'>URL - <span className='urlColor'>{url}</span></p>}
+        {(name && room) && <h2 className='intro'>Hi {name}</h2>}
+        { (name && room) && <PlanningPokerGame name={name}  room={room} urlRoom = {urlRoom} reveal={reveal} isBossAvailable = {isBossAvailable}/> }
+        
+        <VoterCard roomData = {roomData} reveal= {reveal}/>
       </div>
-      {/* <h1><span class='one'>r</span><span class='two'>i</span><span class='three'>s</span><span class='four'>e</span> <span class='five'>u</span><span class='six'>p</span></h1> */}
-      { (!name && !room) && <NameForm onNameUpdate={handleNameUpdate} urlRoom = {urlRoom}/> }
-      {!urlRoom && room && <p className='urlClass'>URL - <span className='urlColor'>{url}</span></p>}
-      {(name && room) && <h2 className='intro'>Hi {name}</h2>}
-      { (name && room) && <PlanningPokerGame name={name}  room={room} urlRoom = {urlRoom} reveal={reveal} isBossAvailable = {isBossAvailable}/> }
-      
-      <VoterCard roomData = {roomData} reveal= {reveal}/>
+      <div className='app2'>
+        <h1></h1>
+      </div>
     </div>
   );
 }

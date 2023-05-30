@@ -1,8 +1,18 @@
 @import url('https://fonts.googleapis.com/css?family=Anton|Roboto|Dancing+Script|Monomaniac+One&display=swap');
 /* @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap'); */
-.App {
+.app {
   color: rgb(29, 91, 100);
   margin-left: 10px;
+  width: 1000px;
+  position: relative;
+}
+.app1 {
+  width: 600px;
+  float: left;
+}
+.app2 {
+  width: 400px;
+  float: left;
 }
 
 .App-logo {
@@ -73,7 +83,7 @@
 .memberLiRed { background: #f4433633; }
 .adminRow {
     margin-bottom: 14px;
-    color: white;
+    color: rgb(45, 28, 28);
     background: #1ca1b3b0;
 }
 .vote {
@@ -163,11 +173,11 @@ body {
 }
 .textInput {
   color: #23818e;
-  width: 262px;
+  width: 212px;
   height: 40px;
   /* top: 2px; */
   position: relative;
-  font-size: 19px;
+  font-size: 18px;
   border: solid 2px;
   padding-left: 12px;
   border-radius: 7px;
@@ -191,7 +201,7 @@ body {
 .word span {
   cursor: pointer;
   display: inline-block;
-  font-size: 50px;
+  font-size: 49px;
   user-select: none;
   line-height: .8;
 }
