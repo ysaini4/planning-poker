@@ -1,10 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
 import {SocketContext} from './Socketcontext'
 import './App.css'
-function PlanningPokerGame({name, room, urlRoom, reveal, isBossAvailable}) {
+function PlanningPokerGame({title:inputTitle , name, room, urlRoom, reveal, isBossAvailable}) {
   const [vote, setVote] = useState(null)
   const socket = useContext(SocketContext);
-
+  const [title , setTitle] = useState(inputTitle);
+  useEffect(() => {
+  setTitle(inputTitle)
+  }, [inputTitle])
   function handleVoteChange(e,val) {
     const voteValue = e.target.value
     console.log(voteValue,'ddd')
@@ -26,6 +29,17 @@ function PlanningPokerGame({name, room, urlRoom, reveal, isBossAvailable}) {
   const handleReveal = () => {
     socket.emit('reveal', room);
   }
+
+  const handleChangeTitle = () => {
+    socket.emit('titleChange', room, title);
+  }
+
+  const handleChangeTitleInput = (event) => {
+    const ttl =  event.target.value
+    socket.emit('titleChange', room, ttl);
+    setTitle(ttl);
+  }
+
   const handleClear = () => {
     socket.emit('clear', room);
 
@@ -35,6 +49,13 @@ function PlanningPokerGame({name, room, urlRoom, reveal, isBossAvailable}) {
       {isBossAvailable ? <>
       
         <div className='wrapper'>
+         <div className='titleWrapper'>
+          {!urlRoom &&  <input name='title' className='textInput textInputTitle' value={title} placeholder='Title/Ticket/Issue or Anything...' onChange={handleChangeTitleInput}/>}
+          {urlRoom &&  <p className='title'>
+            {title}
+          </p> }
+         </div>
+          
         {pokerNo.map(item => <>
         <input disabled={reveal} type="radio" name="select" id={item.toString()} onChange={handleVoteChange} value={item} checked={vote == item} />
         <label htmlFor={item.toString()} className="option">

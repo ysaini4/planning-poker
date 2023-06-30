@@ -29,6 +29,15 @@ io.on('connection', (socket) => {
     io.to(room).emit('broadVote', {roomData: roomsData[room]})
 
   })
+
+  socket.on('titleChange', (room, title) => {
+    roomsData[room].map(item => {
+      if(item.isAdmin) 
+        item.title = title;
+    })
+    io.to(room).emit('broadVote', {roomData: roomsData[room]})
+
+  })
   socket.on('clear', (room) => {
     roomsData[room].map(item => {
       item.vote = 0;
@@ -55,7 +64,7 @@ io.on('connection', (socket) => {
 
   });
 
-  socket.on('createRoom', (name, room) => {
+  socket.on('createRoom', (name, room, title) => {
     console.log(`${name} joined the room ${room}--- ${socket.id}`);
     socket.join(room);
     createdRooms.push(room);
@@ -64,7 +73,8 @@ io.on('connection', (socket) => {
       name,
       vote: 0,
       id: socket.id,
-      isAdmin: true
+      isAdmin: true,
+      title: title
     })
     socket.emit('roomCreated', { room });
     io.to(room).emit('broadVote', {roomData: roomsData[room]})

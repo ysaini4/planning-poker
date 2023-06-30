@@ -5,10 +5,14 @@ import './App.css';
 
 function NameForm({onNameUpdate, urlRoom}) {
   const [name, setName] = useState('');
+  const [title, setTitle] = useState('');
   const socket = useContext(SocketContext);
   const uniqueId = new ShortUniqueId({ length: 10 });
   const handleChange = (event) => {
     setName(event.target.value);
+  }
+  const handleChangeTitle = (event) => {
+    setTitle(event.target.value);
   }
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -20,11 +24,9 @@ function NameForm({onNameUpdate, urlRoom}) {
       });
     } else {
       const room = uniqueId()
-      console.log(room,'room---')
-      socket.emit('createRoom', name, room); // emit a 'join' event with the user's name
+      socket.emit('createRoom', name, room, title); // emit a 'join' event with the user's name
       socket.on('roomCreated', (room) => {
-          console.log(room,'ddd')
-        onNameUpdate(room.room, name)
+        onNameUpdate(room.room, name, title)
       });
     
     }
@@ -34,6 +36,8 @@ function NameForm({onNameUpdate, urlRoom}) {
       <label>
         
         <input className='textInput' type="text" value={name} onChange={handleChange} placeholder='Enter Your Name'/>
+        <br />
+        {/* {!urlRoom && <input className='textInput' type="text" value={title} onChange={handleChangeTitle} placeholder='Title or Ticket/Jira No.'/>} */}
       </label>
       <button className='button nameButton' type="submit">Submit</button>
     </form>

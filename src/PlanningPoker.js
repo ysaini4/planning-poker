@@ -7,19 +7,20 @@ import './App.css';
 function PlanningPoker() {
   const [name, setName] = useState(null)
   const [room, setRoom] = useState(null)
+  const [title, setTitle] = useState(null)
   const [reveal, setReveal] = useState(false)
   const [isBossAvailable, setBossAvailablity] = useState(false)
   const socket = useContext(SocketContext);
   const [roomData, setRoomData] = useState([]);
   const urlRoom = new URLSearchParams(window.location.search).get('Id');
   const url = `${window.location.href}?Id=${room}`
-  const handleNameUpdate = (room, name) => {
+  const handleNameUpdate = (room, name, title) => {
     setRoom(room)
     setName(name)
+   
   }
 
   useEffect(() => {
-    console.log(urlRoom,'urlRoom---')
     if(urlRoom) {
       socket.emit('broadMember', urlRoom)
     }
@@ -34,6 +35,10 @@ function PlanningPoker() {
   useEffect(() => {
     const reveal = !!roomData.filter(item => item.reveal && item.isAdmin).length
     const isBossAvailable = !!roomData.filter(item => item.isAdmin).length
+    if(isBossAvailable) {
+      const title = roomData.filter(item => item.isAdmin)[0].title
+      setTitle(title)
+    }
     setBossAvailablity(isBossAvailable)
     setReveal(reveal)
   }, [roomData])
@@ -58,7 +63,7 @@ function PlanningPoker() {
     <div className='app'>
       <div className='app1'>
         {/* <h1 className='heading'>PLANNING POKER</h1> */}
-        <div class="word heading">
+        <div className="word heading">
           <span>P</span>
           <span>L</span>
           <span>A</span>
@@ -79,7 +84,8 @@ function PlanningPoker() {
         { (!name && !room) && <NameForm onNameUpdate={handleNameUpdate} urlRoom = {urlRoom}/> }
         {!urlRoom && room && <p className='urlClass'>URL - <span className='urlColor'>{url}</span></p>}
         {(name && room) && <h2 className='intro'>Hi {name}</h2>}
-        { (name && room) && <PlanningPokerGame name={name}  room={room} urlRoom = {urlRoom} reveal={reveal} isBossAvailable = {isBossAvailable}/> }
+       
+        { (name && room) && <PlanningPokerGame title ={title} name={name}  room={room} urlRoom = {urlRoom} reveal={reveal} isBossAvailable = {isBossAvailable}/> }
         
         <VoterCard roomData = {roomData} reveal= {reveal}/>
       </div>

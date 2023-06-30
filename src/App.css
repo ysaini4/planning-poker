@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Anton|Roboto|Dancing+Script|Monomaniac+One&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Tilt+Prism|Pacifico|Anton|Roboto|Dancing+Script|Monomaniac+One&display=swap');
 /* @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap'); */
 .app {
   color: rgb(29, 91, 100);
@@ -142,7 +142,15 @@ input[type="radio"]:checked + label {
   background-color: rgb(25, 100, 110);
   color: white;
 }
-
+.title {
+  margin: 0 0 8px 0;
+  font-size: 30px;
+ font-family: 'Monomaniac One', sans-serif;
+  
+}
+.titleWrapper {
+  width: 100%;
+}
 input[type="radio"]:disabled + label {
   background-color: rgb(168, 172, 173);
   color: white;
@@ -157,6 +165,11 @@ input[type="radio"]:disabled + label {
   font-weight: bold;
   border-radius: 9px;
   border: solid #1b393d 2px;
+}
+.button_change {
+  width: 170px ;
+  margin-bottom: 30px;
+  margin-left: 0px;
 }
 .button:hover {
   background-color: #2e9ead;
@@ -182,11 +195,18 @@ body {
   padding-left: 12px;
   border-radius: 7px;
 }
+.textInputTitle {
+  margin-bottom: 12px;
+ font-family: 'Monomaniac One', sans-serif;
+ font-size: 30px;
+  padding-bottom: 7px;
+  width: 90%;
+}
 .intro {
   font-weight: bold;
   font-size: 37px;
   color: #70757d;
-  font-family: 'Dancing Script', cursive;
+  font-family: 'Tilt Prism', cursive;
   margin: 0 0 11px 2px;
 }
 .nameButton {
