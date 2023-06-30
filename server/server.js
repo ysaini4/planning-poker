@@ -11,9 +11,7 @@ const io = require('socket.io')(server);
 io.on('connection', (socket) => {
   console.log('a user connected', socket.id);
   socket.on("disconnect", (reason) => {
-    console.log('disconnet--', socket.id,'ssss')
     Object.keys(roomsData).forEach(room => {
-      console.log(room, roomsData[room],'vv')
       roomsData[room] = roomsData[room].filter(user => user.id !== socket.id);
       io.to(room).emit('broadVote', {roomData: roomsData[room]})
     })
@@ -51,7 +49,6 @@ io.on('connection', (socket) => {
   })
   socket.on('vote', ({ name, room, vote }) => {
     const roomString = room.toString()
-    console.log(vote,'voteeee')
     const voterData = roomsData[roomString] && roomsData[roomString].find(item => item.name === name)
     if (voterData) {
 

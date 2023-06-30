@@ -4,7 +4,6 @@ import './App.css'
 function VoterCard({roomData, reveal}) {
 
   const sortData = (a, b) => {
-    console.log(a.isAdmin,'a.isAdmin', reveal)
     if(a.isAdmin) {
       return -1;
     } else if(b.isAdmin) {

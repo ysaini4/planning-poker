@@ -6,11 +6,11 @@ function PlanningPokerGame({title:inputTitle , name, room, urlRoom, reveal, isBo
   const socket = useContext(SocketContext);
   const [title , setTitle] = useState(inputTitle);
   useEffect(() => {
+    
   setTitle(inputTitle)
   }, [inputTitle])
   function handleVoteChange(e,val) {
     const voteValue = e.target.value
-    console.log(voteValue,'ddd')
     if(voteValue) {
       setVote(voteValue);
       socket.emit('vote', {name, room, vote:voteValue});
@@ -25,9 +25,11 @@ function PlanningPokerGame({title:inputTitle , name, room, urlRoom, reveal, isBo
   const [titleInput, setTitleInput] = useState();
   useEffect(() => {
     const handler = setTimeout(() => {
-      socket.emit('titleChange', room, titleInput);
-      setTitleInput(titleInput);
-    }, 500);
+        if(!urlRoom) {
+        socket.emit('titleChange', room, titleInput);
+        setTitleInput(titleInput);
+      }
+      }, 500);
 
     return () => {
       clearTimeout(handler);
@@ -50,6 +52,7 @@ function PlanningPokerGame({title:inputTitle , name, room, urlRoom, reveal, isBo
     socket.emit('clear', room);
 
   }
+
   return (
     <div>
       {isBossAvailable ? <>
