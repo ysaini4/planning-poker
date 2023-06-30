@@ -197,9 +197,9 @@ body {
 }
 .textInputTitle {
   margin-bottom: 12px;
- font-family: 'Monomaniac One', sans-serif;
- font-size: 30px;
-  padding-bottom: 7px;
+  /* font-family: 'Monomaniac One', sans-serif; */
+  font-size: 18px;
+  /* padding-bottom: 7px; */
   width: 90%;
 }
 .intro {
