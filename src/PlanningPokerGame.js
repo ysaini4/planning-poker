@@ -22,7 +22,19 @@ function PlanningPokerGame({title:inputTitle , name, room, urlRoom, reveal, isBo
       setVote(null)
   });
   }, [socket])
+  const [titleInput, setTitleInput] = useState();
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      socket.emit('titleChange', room, titleInput);
+      setTitleInput(titleInput);
+    }, 500);
 
+    return () => {
+      clearTimeout(handler);
+    };
+  },
+  [titleInput]
+  );
   
   const pokerNo = [1, 3, 5, 8, 13, 20, 40, 100]
   
@@ -30,14 +42,8 @@ function PlanningPokerGame({title:inputTitle , name, room, urlRoom, reveal, isBo
     socket.emit('reveal', room);
   }
 
-  const handleChangeTitle = () => {
-    socket.emit('titleChange', room, title);
-  }
-
   const handleChangeTitleInput = (event) => {
-    const ttl =  event.target.value
-    socket.emit('titleChange', room, ttl);
-    setTitle(ttl);
+    setTitleInput(event.target.value)
   }
 
   const handleClear = () => {
@@ -50,7 +56,7 @@ function PlanningPokerGame({title:inputTitle , name, room, urlRoom, reveal, isBo
       
         <div className='wrapper'>
          <div className='titleWrapper'>
-          {!urlRoom &&  <input name='title' className='textInput textInputTitle' value={title} placeholder='Title/Ticket/Issue or Anything...' onChange={handleChangeTitleInput}/>}
+          {!urlRoom &&  <input name='title' className='textInput textInputTitle' placeholder='Title/Ticket/Issue or Anything...' onChange={handleChangeTitleInput}/>}
           {urlRoom &&  <p className='title'>
             {title}
           </p> }
