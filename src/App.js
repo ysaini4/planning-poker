@@ -7,7 +7,7 @@ import {SocketContext} from './Socketcontext';
 //const server = 'https://fast-depths-40126.herokuapp.com';
 const server = 'https://poker-server-vkeg.onrender.com';
 const server_local = 'http://localhost:3001';
-const socket = io(server_local, {  autoConnect: true, transports: ['websocket'] }); // connect to the socket.io server
+const socket = io(server, {  autoConnect: true, transports: ['websocket'] }); // connect to the socket.io server
 function App() {
   
   return (
