@@ -38,7 +38,7 @@ function PlanningPokerGame({title:inputTitle , name, room, urlRoom, reveal, isBo
   [titleInput]
   );
   
-  const pokerNo = [1, 3, 5, 8, 13, 20, 40, 100]
+  const pokerNo = [1, 2, 3, 5, 8, 13, 20, 40]
   
   const handleReveal = () => {
     socket.emit('reveal', room);
